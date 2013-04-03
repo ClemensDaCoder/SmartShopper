@@ -5,7 +5,9 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceUnit;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -30,9 +32,7 @@ public class ArticleResource {
 	@Path("/{barcode}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Article getArticle(@PathParam("barcode") String barcode) {
-		ArticleEntity article = new ArticleEntity();
-//		try {
-			
+		ArticleEntity article = new ArticleEntity();			
 	    article = entityManager.find(ArticleEntity.class, barcode);
 		if (article == null) {
 			Response response = Response.status(Status.NOT_FOUND)
@@ -44,13 +44,18 @@ public class ArticleResource {
 		result.setBarcode(barcode);
 		result.setName(article.getName());
 		result.setPrice(article.getPrice());
-//		} catch (Exception e) {
-//			Response response = Response.status(Status.NOT_FOUND).entity(e).build();
-//			throw new WebApplicationException(response);
-//		}
 
 		return result;
-//		return null;
+	}
+	
+	@PUT
+	@Path("/insert/{barcode}-{name}-{price}/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void putArticle(@PathParam("barcode") String barcode, @PathParam("name") String name, @PathParam("price") Double price) {
+		//TODO: fig
+		
+		ArticleEntity article = new ArticleEntity(barcode, name, price);
+		entityManager.persist(article);
 	}
 
 }
