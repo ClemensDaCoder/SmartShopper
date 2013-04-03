@@ -40,7 +40,7 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<finalName>smartshopper.backend</finalName>
 		<plugins>
@@ -57,13 +57,18 @@
 						<phase>install</phase>
 						<configuration>
 							<target>
-								<copy file="target/smartshopper.backend.war"
+								<!-- <copy file="target/smartshopper.backend.war"
 									todir="D:\dev\Tools\jboss-as-7.1.1.Final\standalone\deployments"
+									overwrite="true" /> -->
+									
+								<loadproperties srcFile="jboss.properties" />
+								<copy file="target/smartshopper.backend.war"
+									todir="${jboss.deployment.location}"
 									overwrite="true" />
 							</target>
 						</configuration>
 						<goals>
-						    <goal>run</goal>
+							<goal>run</goal>
 						</goals>
 					</execution>
 				</executions>
