@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://backend.smartshopper.jku.at/"
+	xmlns:tns="http://backend.smartshopper.jku.at/"
+	elementFormDefault="qualified">
+	
+	<xs:element name="article" type="tns:article"/>
+	<xs:element name="basket" type="tns:basket"/>
+	
+    <xs:complexType name="article">
+    	<xs:sequence>
+    		<xs:element name="barcode" type="xs:string" minOccurs="1"/>
+    		<xs:element name="name" type="xs:string" minOccurs="1"/>
+    		<xs:element name="price" type="xs:double" minOccurs="1"/>
+    	</xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="basket">
+    	<xs:sequence>
+    		<xs:element name="barcodes" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+    		<xs:element name="userId" type="xs:int" minOccurs="1"/>
+    	</xs:sequence>
+    </xs:complexType>
+</xs:schema>
