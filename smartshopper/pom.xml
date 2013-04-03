@@ -16,7 +16,6 @@
 	</modules>
 
 	<build>
-	    
 		<pluginManagement>
 			<plugins>
 				<plugin>
