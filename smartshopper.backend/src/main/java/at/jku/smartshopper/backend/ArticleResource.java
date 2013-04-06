@@ -3,7 +3,6 @@ package at.jku.smartshopper.backend;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceUnit;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -49,13 +48,13 @@ public class ArticleResource {
 	}
 	
 	@PUT
-	@Path("/insert/{barcode}-{name}-{price}/")
+	@Path("/{barcode}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void putArticle(@PathParam("barcode") String barcode, @PathParam("name") String name, @PathParam("price") Double price) {
-		//TODO: fig
-		
-		ArticleEntity article = new ArticleEntity(barcode, name, price);
-		entityManager.persist(article);
+	public void putArticle(@PathParam("barcode") String barcode, ArticleEntity article) {
+		if (article != null) {
+			article.setBarcode(barcode);
+			entityManager.persist(article);
+		}
 	}
 
 }
