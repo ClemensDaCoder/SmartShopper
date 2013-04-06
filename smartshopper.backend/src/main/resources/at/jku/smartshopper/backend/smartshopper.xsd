@@ -18,7 +18,7 @@
     <xs:complexType name="basket">
     	<xs:sequence>
     		<xs:element name="barcodes" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-    		<xs:element name="userId" type="xs:int" minOccurs="1"/>
+    		<xs:element name="userId" type="xs:string" minOccurs="1"/>
     	</xs:sequence>
     </xs:complexType>
 </xs:schema>
