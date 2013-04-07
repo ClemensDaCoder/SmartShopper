@@ -16,6 +16,8 @@ public class BasketToArticleEntity {
 	private BasketEntity basket;
 	@ManyToOne
 	private ArticleEntity article;
+	
+	private Double price;
 
 	public BasketToArticleEntity(Long id, Integer amount, BasketEntity basket,
 			ArticleEntity article) {
@@ -62,6 +64,14 @@ public class BasketToArticleEntity {
 		this.article = article;
 	}
 
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -70,6 +80,7 @@ public class BasketToArticleEntity {
 		result = prime * result + ((article == null) ? 0 : article.hashCode());
 		result = prime * result + ((basket == null) ? 0 : basket.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((price == null) ? 0 : price.hashCode());
 		return result;
 	}
 
@@ -102,7 +113,13 @@ public class BasketToArticleEntity {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (price == null) {
+			if (other.price != null)
+				return false;
+		} else if (!price.equals(other.price))
+			return false;
 		return true;
 	}
+
 
 }
