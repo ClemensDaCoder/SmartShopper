@@ -50,10 +50,13 @@ public class ArticleResource {
 	@PUT
 	@Path("/{barcode}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void putArticle(@PathParam("barcode") String barcode, ArticleEntity article) {
+	public void putArticle(@PathParam("barcode") String barcode, Article article) {
 		if (article != null) {
-			article.setBarcode(barcode);
-			entityManager.persist(article);
+			ArticleEntity articleEntity = new ArticleEntity();
+			articleEntity.setBarcode(barcode);
+			articleEntity.setName(article.getName());
+			articleEntity.setPrice(article.getPrice());			
+			entityManager.persist(articleEntity);
 		}
 	}
 
