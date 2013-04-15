@@ -8,6 +8,7 @@
 
 package at.jku.smartshopper.backend;
 
+import java.math.BigInteger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -15,18 +16,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for article complex type.
+ * <p>Java class for basketRow complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="article">
+ * &lt;complexType name="basketRow">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="barcode" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="price" type="{http://www.w3.org/2001/XMLSchema}double"/>
+ *         &lt;element name="quantity" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+ *         &lt;element name="price" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,18 +37,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "article", propOrder = {
+@XmlType(name = "basketRow", propOrder = {
     "barcode",
-    "name",
+    "quantity",
     "price"
 })
-public class Article {
+public class BasketRow {
 
     @XmlElement(required = true)
     protected String barcode;
     @XmlElement(required = true)
-    protected String name;
-    protected double price;
+    protected BigInteger quantity;
+    protected Double price;
 
     /**
      * Gets the value of the barcode property.
@@ -74,42 +75,50 @@ public class Article {
     }
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the quantity property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link BigInteger }
      *     
      */
-    public String getName() {
-        return name;
+    public BigInteger getQuantity() {
+        return quantity;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the quantity property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link BigInteger }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setQuantity(BigInteger value) {
+        this.quantity = value;
     }
 
     /**
      * Gets the value of the price property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Double }
+     *     
      */
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
     /**
      * Sets the value of the price property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Double }
+     *     
      */
-    public void setPrice(double value) {
+    public void setPrice(Double value) {
         this.price = value;
     }
 

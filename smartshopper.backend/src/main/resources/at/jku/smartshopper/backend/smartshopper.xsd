@@ -2,6 +2,8 @@
 <xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://backend.smartshopper.jku.at/" xmlns:tns="http://backend.smartshopper.jku.at/"
 	elementFormDefault="qualified">
+	
+	<!-- xjc -d D:\generated smartshopper.xsd -->
 
 	<xs:element name="article" type="tns:article" />
 	<xs:element name="basket" type="tns:basket" />
@@ -26,6 +28,8 @@
 		<xs:sequence>
 			<xs:element name="barcode" type="xs:string" minOccurs="1" />
 			<xs:element name="quantity" type="xs:integer" minOccurs="1" />
+			<!-- price is per unit - total price of basket element is price * quantity -->
+			<xs:element name="price" type="xs:double" minOccurs="0" />
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
