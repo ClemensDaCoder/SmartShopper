@@ -78,7 +78,7 @@ public class BasketResource {
 	@Path("/{username}/{basket}/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void putBasket(@PathParam("username") String username, @PathParam("basket") long timeStamp, Basket basket) {
-		//load user entity from database
+		//load user entity from database - throws exception
 		UserEntity userEntity = WebserviceEntityManager.getUserEntity(username);
 		
 		if (basket != null) {
@@ -93,6 +93,7 @@ public class BasketResource {
 			basketEntity.setUser(userEntity);
 			Date insertStamp = new Date(timeStamp);
 			basketEntity.setInsertStamp(insertStamp);
+			//create list of BasketToArticleEntity (content of basket)
 			List<BasketToArticleEntity> basketToArticle = new ArrayList<BasketToArticleEntity>();
 			for (BasketRow row : basket.getRows()) {
 				ArticleEntity articleEntity = WebserviceEntityManager.getArticleEntity(row.getBarcode());
@@ -105,6 +106,10 @@ public class BasketResource {
 			}
 			basketEntity.setBasketToArticle(basketToArticle);
 //			entityManager.persist(basketToArticle);
+						
+			
+			//???
+			userEntity.getBaskets().add(basketEntity);
 			transaction.commit();
 		}
 	}
