@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import at.jku.smartshopper.backend.util.WebserviceEntityManager;
 import at.jku.smartshopper.persistence.ArticleEntity;
 
 
@@ -31,18 +32,11 @@ public class ArticleResource {
 	@Path("/{barcode}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Article getArticle(@PathParam("barcode") String barcode) {
-		ArticleEntity article = new ArticleEntity();			
-	    article = entityManager.find(ArticleEntity.class, barcode);
-		if (article == null) {
-			Response response = Response.status(Status.NOT_FOUND)
-					.entity("Article not found!").build();
-			throw new WebApplicationException(response);
-		}
-
+		ArticleEntity articleEntity = WebserviceEntityManager.getArticleEntity(barcode);
 		Article result = new Article();
 		result.setBarcode(barcode);
-		result.setName(article.getName());
-		result.setPrice(article.getPrice());
+		result.setName(articleEntity.getName());
+		result.setPrice(articleEntity.getPrice());
 
 		return result;
 	}
@@ -52,6 +46,11 @@ public class ArticleResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void putArticle(@PathParam("barcode") String barcode, Article article) {
 		if (article != null) {
+			ArticleEntity exisitingEntity = entityManager.find(ArticleEntity.class, barcode);
+			if (exisitingEntity != null) {
+				Response response = Response.status(Status.CONFLICT).entity("Article with given barcode already exists!").build();
+				throw new WebApplicationException(response);
+			}
 			ArticleEntity articleEntity = new ArticleEntity();
 			articleEntity.setBarcode(barcode);
 			articleEntity.setName(article.getName());
