@@ -17,6 +17,12 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.7</version>
+		</dependency>
+		    
+		<dependency>
 			<groupId>at.jku</groupId>
 			<artifactId>smartshopper.persistence</artifactId>
 			<version>0.0.1-SNAPSHOT</version>

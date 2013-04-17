@@ -3,6 +3,7 @@ package at.jku.smartshopper.persistence;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -15,9 +16,9 @@ public class BasketEntity {
 	private Date insertStamp;
 	@ManyToOne
 	private UserEntity user;
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<BasketToArticleEntity> basketToArticle;
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	private ShopEntity shop;
 
 	public BasketEntity() {

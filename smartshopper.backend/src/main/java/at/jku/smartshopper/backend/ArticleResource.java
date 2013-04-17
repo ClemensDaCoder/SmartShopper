@@ -27,12 +27,14 @@ public class ArticleResource {
 //	@PersistenceUnit(unitName = "SmartShopperPersistence")
 	@Inject
 	private EntityManager entityManager;
+	@Inject
+	private WebserviceEntityManager webserviceEntityManager;
 
 	@GET
 	@Path("/{barcode}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Article getArticle(@PathParam("barcode") String barcode) {
-		ArticleEntity articleEntity = WebserviceEntityManager.getArticleEntity(barcode);
+		ArticleEntity articleEntity = webserviceEntityManager.getEntity(ArticleEntity.class, barcode);
 		Article result = new Article();
 		result.setBarcode(barcode);
 		result.setName(articleEntity.getName());

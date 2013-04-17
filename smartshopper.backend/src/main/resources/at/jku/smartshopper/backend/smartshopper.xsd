@@ -8,6 +8,7 @@
 	<xs:element name="article" type="tns:article" />
 	<xs:element name="basket" type="tns:basket" />
 	<xs:element name="basketRow" type="tns:basketRow"/>
+	<xs:element name="user" type="tns:user"/>
 
 	<xs:complexType name="article">
 		<xs:sequence>
@@ -30,6 +31,17 @@
 			<xs:element name="quantity" type="xs:integer" minOccurs="1" />
 			<!-- price is per unit - total price of basket element is price * quantity -->
 			<xs:element name="price" type="xs:double" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="user">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="1"/>
+			<xs:element name="surname" type="xs:string" minOccurs="1"/>
+			<xs:element name="username" type="xs:string" minOccurs="1"/>
+			<xs:element name="password" type="xs:string" minOccurs="1"/>
+			<xs:element name="accountNumber" type="xs:long" minOccurs="1"/>
+			<xs:element name="sortCode" type="xs:long" minOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>

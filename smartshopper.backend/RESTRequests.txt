@@ -11,17 +11,63 @@ URL: http://localhost:8080/smartshopper.backend/article/4
 
 -----------------------------------------------------------------------
 
-
 Get Article
 Method: GET
 URL: http://localhost:8080/smartshopper.backend/article/4
 
 -----------------------------------------------------------------------
 
-
 Put Basket
 
 Method: PUT
 URL: http://localhost:8080/smartshopper.backend/article/4
+
+
+
+
+-----------------------------------------------------------------------
+
+Put User
+
+Method: PUT
+URL: http://localhost:8080/smartshopper.backend/user/smartshopper
+
+{
+  "username": "smartshopper",
+  "name": "Smart",
+  "surname": "Shopper",
+  "password": "smart",
+  "accountNumber": "123456789",
+  "sortCode": "12345"
+}
+
+
+-----------------------------------------------------------------------
+
+Put Basket
+
+Method: PUT
+URL: http://localhost:8080/smartshopper.backend/basket/smartshopper/basket/1366223832000
+
+{
+  "userId": "smartshopper",
+  "rows": [
+    {
+      "barcode": "2",
+      "quantity": "3"
+    },
+    {
+      "barcode": "4",
+      "quantity": "1"
+    }
+  ]
+}
+
+-----------------------------------------------------------------------
+
+Get Basket
+
+Method: GET
+URL: http://localhost:8080/smartshopper.backend/basket/smartshopper/1366223832001
 
 

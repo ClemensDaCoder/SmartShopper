@@ -8,7 +8,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -34,22 +33,18 @@ public class BasketResource {
 
 	@Inject
 	private EntityManager entityManager;
+	@Inject
+	private WebserviceEntityManager webserviceEntityManager;
 
 	@GET
-	@Path("/{username}/{basket}/")
+	@Path("/{username}/{timestamp}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Basket getBasket(@PathParam("username") String username, @PathParam("basket") long timeStamp) {
+	public Basket getBasket(@PathParam("username") String username, @PathParam("timestamp") long timeStamp) {
 		// load user entity from database
-		UserEntity userEntity = WebserviceEntityManager.getUserEntity(username);
+		UserEntity userEntity = webserviceEntityManager.getEntity(UserEntity.class, username);
 		// load basket entity from database
-		BasketEntity basketEntity = new BasketEntity();
-		basketEntity = entityManager.find(BasketEntity.class, timeStamp);
-		// if basket does not exist
-		if (basketEntity == null) {
-			Response response = Response.status(Status.NOT_FOUND)
-					.entity("Basket not found!").build();
-			throw new WebApplicationException(response);
-		}
+		BasketEntity basketEntity = webserviceEntityManager.getEntity(BasketEntity.class, new Date(timeStamp));
+		
 		// if user does not own basket
 		if (!basketEntity.getUser().equals(userEntity)) {
 			Response response = Response
@@ -61,7 +56,7 @@ public class BasketResource {
 
 		// everything ok - now fill basket object and return it
 		Basket basket = new Basket();
-		basket.setUserId(userEntity.getName());
+		basket.setUserId(userEntity.getUsername());
 		// add all items stored in basketEntity to basket
 		for (BasketToArticleEntity bta : basketEntity.getBasketToArticle()) {
 			BasketRow row = new BasketRow();
@@ -75,42 +70,45 @@ public class BasketResource {
 	}
 
 	@PUT
-	@Path("/{username}/{basket}/")
+	@Path("/{username}/basket/{timestamp}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void putBasket(@PathParam("username") String username, @PathParam("basket") long timeStamp, Basket basket) {
+	public void putBasket(@PathParam("username") String username, @PathParam("timestamp") long timeStamp, Basket basket) {
 		//load user entity from database - throws exception
-		UserEntity userEntity = WebserviceEntityManager.getUserEntity(username);
+		UserEntity userEntity = webserviceEntityManager.getEntity(UserEntity.class, username);
 		
 		if (basket != null) {
-			EntityTransaction transaction = entityManager.getTransaction();
+//			EntityTransaction transaction = entityManager.getTransaction();
 			//test
-			boolean isActive = transaction.isActive();
+//			boolean isActive = transaction.isActive();
 			
 			//begin transaction
-			transaction.begin();
+//			transaction.begin();
 			BasketEntity basketEntity = new BasketEntity();
 			//set attributes of basketEntity 
 			basketEntity.setUser(userEntity);
-			Date insertStamp = new Date(timeStamp);
-			basketEntity.setInsertStamp(insertStamp);
+			basketEntity.setInsertStamp(new Date(timeStamp));
 			//create list of BasketToArticleEntity (content of basket)
 			List<BasketToArticleEntity> basketToArticle = new ArrayList<BasketToArticleEntity>();
 			for (BasketRow row : basket.getRows()) {
-				ArticleEntity articleEntity = WebserviceEntityManager.getArticleEntity(row.getBarcode());
+				ArticleEntity articleEntity = webserviceEntityManager.getEntity(ArticleEntity.class, row.getBarcode());
 				BasketToArticleEntity b2AE = new BasketToArticleEntity();
 				b2AE.setArticle(articleEntity);
 				b2AE.setAmount(row.getQuantity().intValue());
 				b2AE.setBasket(basketEntity);
 				b2AE.setPrice(articleEntity.getPrice());
+				basketToArticle.add(b2AE);
 				//entityManager.persist(b2AE);
 			}
 			basketEntity.setBasketToArticle(basketToArticle);
 //			entityManager.persist(basketToArticle);
 						
-			
 			//???
 			userEntity.getBaskets().add(basketEntity);
-			transaction.commit();
+			
+			//TODO check if this is enough or every entity has to be persisted
+			entityManager.persist(basketEntity);
+			//TODO check if complete transaction is commited
+//			transaction.commit();
 		}
 	}
 

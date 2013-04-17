@@ -2,6 +2,7 @@ package at.jku.smartshopper.persistence;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -16,7 +17,7 @@ public class UserEntity {
 	String passwordHash;
 	Long accountNumber;
 	Long sortCode;
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	List<BasketEntity> baskets;
 		
 	public UserEntity() {

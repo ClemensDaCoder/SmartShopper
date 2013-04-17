@@ -1,5 +1,6 @@
 package at.jku.smartshopper.persistence;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,9 +13,9 @@ public class BasketToArticleEntity {
 	@Id
 	private Long id;
 	private Integer amount;
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	private BasketEntity basket;
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	private ArticleEntity article;
 	
 	private Double price;
