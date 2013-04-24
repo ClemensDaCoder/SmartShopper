@@ -9,6 +9,15 @@
 	<xs:element name="basket" type="tns:basket" />
 	<xs:element name="basketRow" type="tns:basketRow"/>
 	<xs:element name="user" type="tns:user"/>
+	<xs:element name="shop" type="tns:shop"/>
+	
+	<xs:element name="basketList" type="tns:basketList"/>
+	
+	<xs:complexType name="basketList">
+		<xs:sequence>
+			<xs:element name="baskets" type="tns:basket" minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
 	<xs:complexType name="article">
 		<xs:sequence>
@@ -22,6 +31,7 @@
 		<xs:sequence>
 			<xs:element name="rows" type="tns:basketRow" minOccurs="1" maxOccurs="unbounded" />
 			<xs:element name="userId" type="xs:string" minOccurs="1" />
+			<xs:element name="shopId" type="xs:long" minOccurs="1" />
 		</xs:sequence>
 	</xs:complexType>
 
@@ -39,9 +49,20 @@
 			<xs:element name="name" type="xs:string" minOccurs="1"/>
 			<xs:element name="surname" type="xs:string" minOccurs="1"/>
 			<xs:element name="username" type="xs:string" minOccurs="1"/>
-			<xs:element name="password" type="xs:string" minOccurs="1"/>
+			<xs:element name="password" type="xs:string" minOccurs="0"/>
 			<xs:element name="accountNumber" type="xs:long" minOccurs="1"/>
 			<xs:element name="sortCode" type="xs:long" minOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
+	
+	<xs:complexType name="shop">
+		<xs:sequence>
+			<xs:element name="shopId" type="xs:long" minOccurs="1"/>
+			<xs:element name="name" type="xs:string" minOccurs="1"/>
+			<xs:element name="street" type="xs:string" minOccurs="1"/>
+			<xs:element name="zip" type="xs:integer" minOccurs="1"/>
+			<xs:element name="city" type="xs:string" minOccurs="1"/>		
+		</xs:sequence>
+	</xs:complexType>
+	
 </xs:schema>
