@@ -1,12 +1,36 @@
 Put Article
 
 Method: PUT
-URL: http://localhost:8080/smartshopper.backend/article/4
+URL: http://localhost:8080/smartshopper.backend/article/1
+
+{
+  "barcode": "1",
+  "name": "Kinder Schokolade",
+  "price": "1.29"
+}
+
+{
+  "barcode": "2",
+  "name": "Manner Wafferl",
+  "price": "1.49"
+}
+
+{
+  "barcode": "3",
+  "name": "Pringles Paprika",
+  "price": "1.79"
+}
 
 {
   "barcode": "4",
-  "name": "Kinder Schokolade",
-  "price": "1.29"
+  "name": "Pago Mango",
+  "price": "1.19"
+}
+
+{
+  "barcode": "5",
+  "name": "Roemerquelle Mild",
+  "price": "0.59"
 }
 
 -----------------------------------------------------------------------
@@ -41,8 +65,58 @@ URL: http://localhost:8080/smartshopper.backend/user/smartshopper
   "sortCode": "12345"
 }
 
+bzw.
+
+{
+  "username": "schnappi",
+  "name": "Fritz",
+  "surname": "Fantom",
+  "password": "tomturbo",
+  "accountNumber": "2954712",
+  "sortCode": "54782"
+}
+
 
 -----------------------------------------------------------------------
+
+Get User
+
+Method: GET
+URL: http://localhost:8080/smartshopper.backend/user/smartshopper
+
+----------------------------------------------------------------------
+
+Get Shop
+
+Method: GET
+URL: http://localhost:8080/smartshopper.backend/shop/1
+
+-----------------------------------------------------------------------
+
+
+Put Shop
+
+Method: PUT
+URL: http://localhost:8080/smartshopper.backend/shop/1
+
+{
+  "shopId": "1",
+  "name": "SuperShop",
+  "street": "Landstrasse 5",
+  "zip": "4020",
+  "city": "Linz"
+}
+
+{
+  "shopId": "1",
+  "name": "BilligShop",
+  "street": "Dauphinestrasse 29",
+  "zip": "4030",
+  "city": "Linz"
+}
+
+-----------------------------------------------------------------------
+
 
 Put Basket
 
@@ -51,6 +125,7 @@ URL: http://localhost:8080/smartshopper.backend/basket/smartshopper/basket/13662
 
 {
   "userId": "smartshopper",
+  "shopId": "1",
   "rows": [
     {
       "barcode": "2",
@@ -60,7 +135,24 @@ URL: http://localhost:8080/smartshopper.backend/basket/smartshopper/basket/13662
       "barcode": "4",
       "quantity": "1"
     }
-  ]
+  ] 
+}
+
+URL: http://localhost:8080/smartshopper.backend/basket/smartshopper/basket/1366823494000
+
+{
+  "userId": "smartshopper",
+  "shopId": "1",
+  "rows": [
+    {
+      "barcode": "1",
+      "quantity": "2"
+    },
+    {
+      "barcode": "4",
+      "quantity": "1"
+    }
+  ] 
 }
 
 -----------------------------------------------------------------------
@@ -70,4 +162,17 @@ Get Basket
 Method: GET
 URL: http://localhost:8080/smartshopper.backend/basket/smartshopper/1366223832001
 
+-----------------------------------------------------------------------
+
+Get Latest Basket
+
+Method: GET
+URL: http://localhost:8080/smartshopper.backend/basket/smartshopper/latest
+
+-----------------------------------------------------------------------
+
+Get All Baskets
+
+Method: GET
+URL: http://localhost:8080/smartshopper.backend/basket/smartshopper/all
 
