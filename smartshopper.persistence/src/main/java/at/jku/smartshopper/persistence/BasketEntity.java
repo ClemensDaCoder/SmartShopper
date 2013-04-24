@@ -18,7 +18,8 @@ public class BasketEntity {
 	private UserEntity user;
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<BasketToArticleEntity> basketToArticle;
-	@ManyToOne(cascade=CascadeType.ALL)
+//	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	private ShopEntity shop;
 
 	public BasketEntity() {

@@ -24,6 +24,7 @@ import at.jku.smartshopper.backend.util.WebserviceEntityManager;
 import at.jku.smartshopper.persistence.ArticleEntity;
 import at.jku.smartshopper.persistence.BasketEntity;
 import at.jku.smartshopper.persistence.BasketToArticleEntity;
+import at.jku.smartshopper.persistence.ShopEntity;
 import at.jku.smartshopper.persistence.UserEntity;
 
 @ApplicationPath("/")
@@ -37,7 +38,7 @@ public class BasketResource {
 	private WebserviceEntityManager webserviceEntityManager;
 
 	@GET
-	@Path("/{username}/{timestamp}/")
+	@Path("/{username}/basket/{timestamp}/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Basket getBasket(@PathParam("username") String username, @PathParam("timestamp") long timeStamp) {
 		// load user entity from database
@@ -47,26 +48,58 @@ public class BasketResource {
 		
 		// if user does not own basket
 		if (!basketEntity.getUser().equals(userEntity)) {
-			Response response = Response
-					.status(Status.FORBIDDEN)
-					.entity("User does not own Basket! - Should I be tellin' you this?")
-					.build();
+			Response response = Response.status(Status.FORBIDDEN)
+					.entity("User does not own Basket! - Should I be tellin' you this?").build();
 			throw new WebApplicationException(response);
 		}
 
 		// everything ok - now fill basket object and return it
-		Basket basket = new Basket();
-		basket.setUserId(userEntity.getUsername());
-		// add all items stored in basketEntity to basket
-		for (BasketToArticleEntity bta : basketEntity.getBasketToArticle()) {
-			BasketRow row = new BasketRow();
-			row.setBarcode(bta.getArticle().getBarcode());
-			row.setQuantity(BigInteger.valueOf(bta.getAmount()));
-			row.setPrice(bta.getPrice());
-			basket.getRows().add(row);
+		return mapBasket(basketEntity);
+	}
+	
+	
+	@GET
+	@Path("/{username}/basket/latest")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Basket getLatestBasket(@PathParam("username") String username) {
+		// load user entity from database
+		UserEntity userEntity = webserviceEntityManager.getEntity(UserEntity.class, username);
+		
+		//determine latest basket
+		BasketEntity latestBasketEntity = null;
+		for (BasketEntity basketEntity : userEntity.getBaskets()) {
+			if (latestBasketEntity == null) {
+				latestBasketEntity = basketEntity;
+			}
+			if (basketEntity.getInsertStamp().after(latestBasketEntity.getInsertStamp())) {
+				latestBasketEntity = basketEntity;
+			}
 		}
-
-		return basket;
+		
+		//if user has no baskets
+		if (latestBasketEntity == null) {
+			Response response = Response.status(Status.NOT_FOUND).entity("No Basket found!").build();
+			throw new WebApplicationException(response);
+		}
+		
+		return mapBasket(latestBasketEntity);
+	}
+	
+	@GET
+	@Path("/{username}/basket/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public BasketList getAllBaskets(@PathParam("username") String username){
+		// load user entity from database
+		UserEntity userEntity = webserviceEntityManager.getEntity(UserEntity.class, username);
+		
+		BasketList basketList = new BasketList();
+		
+		for (BasketEntity basketEntity : userEntity.getBaskets()) {
+			Basket basket = mapBasket(basketEntity);
+			basketList.getBaskets().add(basket);
+		}
+		
+		return basketList;
 	}
 
 	@PUT
@@ -76,16 +109,17 @@ public class BasketResource {
 		//load user entity from database - throws exception
 		UserEntity userEntity = webserviceEntityManager.getEntity(UserEntity.class, username);
 		
+		
+		
 		if (basket != null) {
-//			EntityTransaction transaction = entityManager.getTransaction();
-			//test
-//			boolean isActive = transaction.isActive();
+			//get shop entity from db
+			ShopEntity shopEntity = webserviceEntityManager.getEntity(ShopEntity.class, basket.getShopId());
 			
 			//begin transaction
-//			transaction.begin();
 			BasketEntity basketEntity = new BasketEntity();
 			//set attributes of basketEntity 
 			basketEntity.setUser(userEntity);
+			basketEntity.setShop(shopEntity);
 			basketEntity.setInsertStamp(new Date(timeStamp));
 			//create list of BasketToArticleEntity (content of basket)
 			List<BasketToArticleEntity> basketToArticle = new ArrayList<BasketToArticleEntity>();
@@ -97,19 +131,33 @@ public class BasketResource {
 				b2AE.setBasket(basketEntity);
 				b2AE.setPrice(articleEntity.getPrice());
 				basketToArticle.add(b2AE);
-				//entityManager.persist(b2AE);
 			}
 			basketEntity.setBasketToArticle(basketToArticle);
-//			entityManager.persist(basketToArticle);
 						
-			//???
 			userEntity.getBaskets().add(basketEntity);
 			
-			//TODO check if this is enough or every entity has to be persisted
 			entityManager.persist(basketEntity);
-			//TODO check if complete transaction is commited
-//			transaction.commit();
 		}
 	}
 
+	/** Creates Basket object from given BasketEntity object.
+	 * 
+	 * @param basketEntity
+	 * @return
+	 */
+	private Basket mapBasket(BasketEntity basketEntity) {
+		Basket basket = new Basket();
+		basket.setUserId(basketEntity.getUser().getUsername());
+		basket.setShopId(basketEntity.getShop().getShopId());
+		// add all items stored in basketEntity to basket
+		for (BasketToArticleEntity bta : basketEntity.getBasketToArticle()) {
+			BasketRow row = new BasketRow();
+			row.setBarcode(bta.getArticle().getBarcode());
+			row.setQuantity(BigInteger.valueOf(bta.getAmount()));
+			row.setPrice(bta.getPrice());
+			basket.getRows().add(row);
+		}
+		
+		return basket;
+	}
 }

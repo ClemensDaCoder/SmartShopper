@@ -7,7 +7,7 @@ import javax.persistence.Id;
 @Entity
 public class ShopEntity {
 
-	@GeneratedValue
+//	@GeneratedValue
 	@Id
 	private Long shopId;
 	private String name;
