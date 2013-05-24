@@ -39,6 +39,7 @@
 		<xs:sequence>
 			<xs:element name="barcode" type="xs:string" minOccurs="1" />
 			<xs:element name="quantity" type="xs:integer" minOccurs="1" />
+			<xs:element name="name" type="xs:string" minOccurs="0" />
 			<!-- price is per unit - total price of basket element is price * quantity -->
 			<xs:element name="price" type="xs:double" minOccurs="0" />
 		</xs:sequence>
