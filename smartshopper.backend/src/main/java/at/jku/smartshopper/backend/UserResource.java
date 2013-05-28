@@ -47,6 +47,7 @@ public class UserResource {
 		userEntity.setSortCode(user.getSortCode());
 		userEntity.setSurname(user.getSurname());
 		userEntity.setUsername(user.getUsername());
+		userEntity.setRole("user");
 		entityManager.persist(userEntity);
 	}
 

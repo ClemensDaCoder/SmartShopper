@@ -19,13 +19,14 @@ public class UserEntity {
 	Long sortCode;
 	@OneToMany(cascade=CascadeType.ALL)
 	List<BasketEntity> baskets;
+	String role;
 		
 	public UserEntity() {
 		super();
 	}
 
 	public UserEntity(String name, String surname, String username,
-			String passwordHash, Long accountNumber, Long sortCode) {
+			String passwordHash, Long accountNumber, Long sortCode, String role) {
 		super();
 		this.name = name;
 		this.surname = surname;
@@ -33,6 +34,7 @@ public class UserEntity {
 		this.passwordHash = passwordHash;
 		this.accountNumber = accountNumber;
 		this.sortCode = sortCode;
+		this.setRole(role);
 	}
 
 	public String getName() {
@@ -91,15 +93,25 @@ public class UserEntity {
 		this.baskets = baskets;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
 				+ ((accountNumber == null) ? 0 : accountNumber.hashCode());
+		result = prime * result + ((baskets == null) ? 0 : baskets.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((passwordHash == null) ? 0 : passwordHash.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result
 				+ ((sortCode == null) ? 0 : sortCode.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
@@ -122,6 +134,11 @@ public class UserEntity {
 				return false;
 		} else if (!accountNumber.equals(other.accountNumber))
 			return false;
+		if (baskets == null) {
+			if (other.baskets != null)
+				return false;
+		} else if (!baskets.equals(other.baskets))
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -131,6 +148,11 @@ public class UserEntity {
 			if (other.passwordHash != null)
 				return false;
 		} else if (!passwordHash.equals(other.passwordHash))
+			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
 			return false;
 		if (sortCode == null) {
 			if (other.sortCode != null)
@@ -149,4 +171,6 @@ public class UserEntity {
 			return false;
 		return true;
 	}
+	
+	
 }

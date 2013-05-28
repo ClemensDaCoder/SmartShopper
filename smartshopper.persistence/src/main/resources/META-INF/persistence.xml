@@ -19,7 +19,7 @@
 			<!-- Hibernate should create the database schema automatically -->
 		    <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <!-- <property name="hibernate.hbm2ddl.auto" value="create"/> -->
+            <!-- <property name="hibernate.hbm2ddl.auto" value="create"/>-->
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 		</properties>

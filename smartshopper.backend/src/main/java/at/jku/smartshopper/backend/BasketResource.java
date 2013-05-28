@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -16,9 +18,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 
 import at.jku.smartshopper.backend.util.WebserviceEntityManager;
 import at.jku.smartshopper.persistence.ArticleEntity;
@@ -37,10 +41,13 @@ public class BasketResource {
 	@Inject
 	private WebserviceEntityManager webserviceEntityManager;
 
+
+	@RolesAllowed("user")
 	@GET
 	@Path("/{username}/basket/{timestamp}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Basket getBasket(@PathParam("username") String username, @PathParam("timestamp") long timeStamp) {
+	public Basket getBasket(@PathParam("username") String username, @PathParam("timestamp") long timeStamp, @Context SecurityContext securityContext) {
+		String securedUser = securityContext.getUserPrincipal().getName();
 		// load user entity from database
 		UserEntity userEntity = webserviceEntityManager.getEntity(UserEntity.class, username);
 		// load basket entity from database
@@ -57,7 +64,7 @@ public class BasketResource {
 		return mapBasket(basketEntity);
 	}
 	
-	
+	@PermitAll
 	@GET
 	@Path("/{username}/basket/latest")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -84,7 +91,8 @@ public class BasketResource {
 		
 		return mapBasket(latestBasketEntity);
 	}
-	
+
+	@PermitAll
 	@GET
 	@Path("/{username}/basket/all")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -102,6 +110,8 @@ public class BasketResource {
 		return basketList;
 	}
 
+
+	@RolesAllowed("user")
 	@PUT
 	@Path("/{username}/basket/{timestamp}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -155,6 +165,7 @@ public class BasketResource {
 			row.setBarcode(bta.getArticle().getBarcode());
 			row.setQuantity(BigInteger.valueOf(bta.getAmount()));
 			row.setPrice(bta.getPrice());
+			row.setName(bta.getArticle().getName());
 			basket.getRows().add(row);
 		}
 		

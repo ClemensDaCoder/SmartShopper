@@ -1,5 +1,6 @@
 package at.jku.smartshopper.backend;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
